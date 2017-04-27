@@ -1,0 +1,319 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, ExtCtrls, Spin, Unit2, Gauges;
+
+type
+  TForm1 = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Timer2: TTimer;
+    Button3: TButton;
+    Gauge1: TGauge;
+    procedure Prepare;
+    procedure Button1Click(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Run;
+    procedure Timer2Timer(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure Button3Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  Int96 =record
+     ready: integer;
+     s1,s2,s3: integer;
+  end;
+  TTaskArray = array [0..21] of Int96;
+
+  TYamada = record
+    f: word; 
+    Ratio: array [0..167] of word;
+  end;
+
+var
+  Form1: TForm1;
+
+  f0: file of word;
+  f2,f3: file of integer;
+  f4: file of byte;
+
+  fprg: textfile;
+  ftm: file of TTaskArray;
+  fjob: textfile;
+
+  Ri,Ti,j,k,steps: integer;
+  imax,jmax,hmax,lmax: integer;
+  h,l,m,p: word;
+  starti,endi: word;
+  s1,s2,s3,sum1,sum2,sum3,posct: integer;
+
+  TaskArray: TTaskArray;
+  YamadaAll: array [0..22] of TYamada;
+  ready,running: boolean;
+  t: TTime;
+
+implementation
+
+{$R *.DFM}
+
+procedure LoadData;
+var i2: word;
+begin
+  imax:=NFH4[Ti];jmax:=NFH4[j];
+  h:=FH(Ti,j);
+  l:=FL(Ti,j);
+  hmax:=NFH4[h];lmax:=NFH4[l];
+
+  seek(f0,Position5[Ti]);
+  BlockRead(f0,D6i,imax);
+  seek(f0,Position5[j]);
+  BlockRead(f0,D6j,jmax);
+  seek(f0,Position5[h]);
+  BlockRead(f0,D6h,hmax);
+  seek(f0,Position5[l]);
+  BlockRead(f0,D6l,lmax);
+
+  seek(f2,Position5[h]);
+  BlockRead(f2,NFH6,hmax);
+  seek(f3,Position5[l]);
+  BlockRead(f3,NFL6,lmax);
+
+  for i2:=0 to hmax-1 do
+    FFFh[D5[D6h[i2],0],D5[D6h[i2],1]]:=NFH6[i2];
+  for i2:=0 to lmax-1 do
+    FFFl[D5[D6l[i2],0],D5[D6l[i2],1]]:=NFL6[i2];
+end;
+
+procedure NextIJ;
+var ichange: boolean;
+begin
+  m:=0;p:=0;
+  ichange:=false;
+
+  inc(steps);
+  inc(j);
+
+  while (YamadaAll[Ri].Ratio[j]=0) and (Ri<=Endi) do
+  begin
+    if j<167 then inc(j) else
+    begin
+      ichange:=true;
+      inc(Ri);
+      Ti:=YamadaAll[Ri].f;
+      j:=0;
+    end;
+  end;
+
+  if ichange then
+  begin
+    TaskArray[Ri-1].Ready:=1;
+    TaskArray[Ri-1].s1:=s1;
+    TaskArray[Ri-1].s2:=s2;
+    TaskArray[Ri-1].s3:=s3;
+    s1:=0;s2:=0;s3:=0;
+  end;
+  if Ri<=Endi then LoadData;
+end;
+
+procedure TForm1.Prepare;
+begin
+  InitArrays;
+  Button1.Enabled:=true;
+  Button3.Enabled:=true;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var    msg: string;
+begin
+  button1.Enabled:=false;
+  button3.Enabled:=false;
+  assignfile(fprg,'c:\mbf\prg.dat');
+  assignfile(ftm,'c:\mbf\tm.dat');
+
+  assignfile(fjob,'c:\mbf\job.txt');
+  reset(fjob);
+  read(fjob,starti,endi);
+  closefile(fjob);
+
+  assignfile(f0,'c:\mbf\d6.dat');
+  reset(f0);
+  assignfile(f2,'c:\mbf\NFH6.dat');
+  reset(f2);
+  assignfile(f3,'c:\mbf\NFL6.dat');
+  reset(f3);
+  assignfile(f4,'c:\mbf\yamada.dat');
+  reset(f4);
+  blockread(f4,YamadaAll,SizeOf(YamadaAll));
+  closefile(f4);
+
+  {$i-}
+  reset(fprg);
+  {$i+}
+  if IOResult<>0 then
+  begin
+    CloseFile(f0);
+    CloseFile(f2);
+    CloseFile(f3);
+    msg:='Unable to open prg.dat';
+    MessageDlg(Msg,MtError,[mbOK],0);
+  end
+  else
+  begin
+    read(fprg,Ri,j,m,p,s1,s2,s3,steps);
+    Ti:=YamadaAll[Ri].f;
+    reset(ftm,'c:\mbf\tm.dat');
+    read(ftm,TaskArray);
+    closefile(fprg);
+    closefile(ftm);
+    LoadData;
+    Running:=true;
+    button2.Enabled:=true;
+    Run;
+  end;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+  Button2.Enabled:=false;
+  Running:=false;
+end;
+
+procedure TForm1.Run;
+var cnt,mul1,mul2,Ratio: integer;
+    m1,p1: word;
+begin
+ if Ri>endi then Running:=false;
+
+ while Running do
+ begin
+  cnt:=0;
+  Ratio:=YamadaAll[Ri].Ratio[j];
+  while (cnt<10000) and Running do
+  begin
+   inc(cnt);
+   if p>jmax-1 then
+   begin
+    p:=0;
+    inc(m);
+    if m>imax-1 then
+    begin
+      NextIJ;
+      if Ri>endi then Running:=false;
+      if running then Ratio:=YamadaAll[Ri].Ratio[j];
+    end;
+   end;
+
+   if Running then
+   begin
+    m1:=D6i[m];
+    p1:=D6j[p];
+    mul1:=FFFh[FH4[D5[m1,0],D5[p1,0]],FH4[D5[m1,1],D5[p1,1]]];
+    mul2:=FFFl[FL4[D5[m1,0],D5[p1,0]],FL4[D5[m1,1],D5[p1,1]]];
+    asm
+         push eax
+         push edx
+         mov eax,mul1
+         mul Ratio
+         mul mul2
+         add s1,eax
+         adc s2,edx
+         adc s3,0
+         pop edx
+         pop eax
+    end;
+    inc(p);
+   end;
+  end;
+  Application.ProcessMessages;
+ end;
+
+ rewrite(fprg);
+ write(fprg,Ri,' ',j,' ',m,' ',p,' ',s1,' ',s2,' ',s3,' ',steps);
+ closefile(fprg);
+ rewrite(ftm);
+ write(ftm,TaskArray);
+ closefile(ftm);
+ closefile(f0);
+ closefile(f2);
+ closefile(f3);
+ Button1.Enabled:=true;
+ Button3.Enabled:=true;
+end;
+
+procedure TForm1.Timer2Timer(Sender: TObject);
+begin
+  Label1.Caption:=IntToStr(Ri);
+  Label2.Caption:=IntToStr(j);
+  Label3.Caption:=IntToStr(m);
+  Label4.Caption:=IntToStr(p);
+  Gauge1.Progress:=Steps;
+end;
+
+procedure TForm1.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+   if Button2.Enabled then Button2Click(self);
+end;
+
+
+procedure TForm1.Button3Click(Sender: TObject);
+var dummyi: integer;
+    i1: int96;
+begin
+  button1.Enabled:=false;
+  button3.Enabled:=false;
+  assignfile(fprg,'c:\mbf\prg.dat');
+  assignfile(ftm,'c:\mbf\tm.dat');
+
+  assignfile(fjob,'c:\mbf\job.txt');
+  reset(fjob);
+  read(fjob,starti,endi);
+  closefile(fjob);
+
+  assignfile(f0,'c:\mbf\d5.dat');
+  reset(f0);
+  assignfile(f2,'c:\mbf\NFH5.dat');
+  reset(f2);
+  assignfile(f3,'c:\mbf\NFL5.dat');
+  reset(f3);
+    assignfile(f4,'c:\mbf\yamada.dat');
+  reset(f4);
+  blockread(f4,YamadaAll,SizeOf(YamadaAll));
+  closefile(f4);
+
+  {$i-}
+  reset(ftm);
+  {$i+}
+  if IOResult<>0 then
+  begin
+    rewrite(ftm);
+    i1.s1:=0;i1.s2:=0;i1.s3:=0;i1.Ready:=0;
+    for dummyi:=0 to 22 do TaskArray[dummyi]:=i1;
+    write(ftm,TaskArray);
+  end
+  else read(ftm,TaskArray);
+
+  rewrite(fprg);
+  Ri:=starti;j:=0;steps:=0;
+  Ti:=YamadaAll[Ri].f;
+  m:=0;p:=0;s1:=0;s2:=0;s3:=0;
+
+  LoadData;
+  closefile(fprg);
+  closefile(ftm);
+  Running:=true;
+  button2.Enabled:=true;
+  Run;
+end;
+
+end.

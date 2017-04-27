@@ -1,0 +1,1 @@
+c:\progra~1\borland\Delphi~1\bin\dcc32.exe mix.dpr
