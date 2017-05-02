@@ -16,7 +16,7 @@ N=1
 O=1
 P=1
 Q=0
-R=1
+R=0
 S=0
 T=0
 U=0
@@ -81,3 +81,6 @@ OriginalFilename=
 ProductName=
 ProductVersion=1.0.0.0
 Comments=
+
+[Excluded Packages]
+C:\WINDOWS\SYSTEM\B106_R40.BPL=Abbrevia Components

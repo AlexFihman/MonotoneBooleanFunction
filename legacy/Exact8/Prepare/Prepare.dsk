@@ -2,13 +2,13 @@
 Create=1
 Visible=1
 State=0
-Left=0
+Left=-3
 Top=0
-Width=800
+Width=652
 Height=105
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=792
+ClientWidth=644
 ClientHeight=78
 
 [PropertyInspector]
@@ -28,23 +28,45 @@ LRDockWidth=190
 Dockable=1
 SplitPos=85
 
+[ProjectManager]
+Create=1
+Visible=1
+State=0
+Left=380
+Top=144
+Width=254
+Height=300
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=246
+ClientHeight=276
+TBDockHeight=300
+LRDockWidth=437
+Dockable=1
+
 [Modules]
-Module0=C:\PROJECTS\MBF\EXACT8\PREPARE\Unit1.pas
-Module1=C:\Projects\MBF\Exact8\Prepare\Prepare.dpr
-Count=2
+Module0=C:\Projects\MBF\Exact8\Prepare.2\Unit1.pas
+Module1=C:\Projects\MBF\Exact8\Prepare.2\Prepare.dpr
+Module2=C:\Projects\MBF\Exact8\Prepare.2\Unit2.pas
+Count=3
 EditWindowCount=1
 
-[C:\Projects\MBF\Exact8\Prepare\Prepare.dpr]
+[C:\Projects\MBF\Exact8\Prepare.2\Unit1.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=1
+
+[C:\PROJECTS\MBF\EXACT8\PREPARE.2\Prepare.dpr]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[C:\PROJECTS\MBF\EXACT8\PREPARE\Unit1.pas]
+[C:\Projects\MBF\Exact8\Prepare.2\Unit2.pas]
 ModuleType=SourceModule
-FormState=1
+FormState=0
 FormOnTop=0
 
-[C:\Projects\MBF\Exact8\Prepare\ProjectGroup1.bpg]
+[C:\Projects\MBF\Exact8\Prepare.2\ProjectGroup1.bpg]
 FormState=0
 FormOnTop=0
 
@@ -54,14 +76,14 @@ MessageView=MessageView@EditWindow0
 Create=1
 Visible=1
 State=0
-Left=200
-Top=126
-Width=544
-Height=376
-MaxLeft=-1
-MaxTop=-1
-ClientWidth=536
-ClientHeight=349
+Left=27
+Top=39
+Width=601
+Height=389
+MaxLeft=-4
+MaxTop=101
+ClientWidth=593
+ClientHeight=362
 LeftPanelSize=140
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=000004000000000000000000000000000000000000000000000100000000000000000C000000436F64654578706C6F726572FFFFFFFF
@@ -69,10 +91,11 @@ RightPanelSize=0
 BottomPanelSize=0
 BottomPanelClients=MessageView@EditWindow0
 BottomPanelData=00000400010000000B0000004D657373616765566965770000000000000000000000000000000000FFFFFFFF
-ViewCount=2
-CurrentView=0
+ViewCount=3
+CurrentView=1
 View0=0
 View1=1
+View2=2
 
 [CodeExplorer@EditWindow0]
 Create=1
@@ -81,11 +104,11 @@ State=0
 Left=0
 Top=11
 Width=140
-Height=320
+Height=333
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=140
-ClientHeight=320
+ClientHeight=333
 TBDockHeight=305
 LRDockWidth=140
 Dockable=1
@@ -96,27 +119,34 @@ Visible=0
 State=0
 Left=11
 Top=0
-Width=525
+Width=582
 Height=52
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=525
+ClientWidth=582
 ClientHeight=52
 TBDockHeight=52
 LRDockWidth=443
 Dockable=1
 
 [View0]
-Module=C:\PROJECTS\MBF\EXACT8\PREPARE\Unit1.pas
+Module=C:\Projects\MBF\Exact8\Prepare.2\Unit2.pas
 CursorX=1
 CursorY=1
 TopLine=1
 LeftCol=1
 
 [View1]
-Module=C:\Projects\MBF\Exact8\Prepare\Prepare.dpr
-CursorX=16
-CursorY=1
+Module=C:\Projects\MBF\Exact8\Prepare.2\Unit1.pas
+CursorX=46
+CursorY=171
+TopLine=170
+LeftCol=8
+
+[View2]
+Module=C:\Projects\MBF\Exact8\Prepare.2\Prepare.dpr
+CursorX=1
+CursorY=15
 TopLine=1
 LeftCol=1
 
@@ -144,7 +174,7 @@ Visible=0
 Left=257
 Top=160
 Width=591
-Height=608
+Height=492
 Layout=1
 Orientation=1
 State=0
@@ -155,18 +185,13 @@ SpaceColor=16776960
 TextColor=0
 
 [Closed Files]
-File_0=SourceModule,'C:\Projects\Monitor\NewMon\MainFrm.pas',0,1,91,19,101,0,1
-File_1=SourceModule,'C:\Projects\Monitor\NewMon\GraphFrm.pas',0,1,104,27,114,0,1
-File_2=SourceModule,'C:\Projects\Monitor\NewMon\ReportFrm.pas',0,1,1,1,1,0,0
-File_3=SourceModule,'C:\Projects\Monitor\NewMon\AboutFrm.pas',0,1,40,1,51,0,0
-File_4=SourceModule,'C:\Projects\Monitor\NewMon\Tables.pas',0,1,22,30,35,0,0
-File_5=SourceModule,'C:\Projects\Monitor\NewMon\EditFrm.pas',0,1,329,1,335,0,0
-File_6=SourceModule,'C:\Projects\Monitor\BaseMake\EditFrm.pas',0,1,216,5,221,0,0
-File_7=SourceModule,'C:\Projects\Monitor\BaseMake\QueryFrm.pas',0,1,219,1,219,0,0
-File_8=SourceModule,'C:\Projects\Monitor\Installer\Crtgrp.pas',0,1,1,1,1,0,0
-File_9=SourceModule,'C:\Projects\Monitor\Uninstall\DeleteFrm.pas',0,1,143,17,151,0,0
-
-[C:\Program Files\Borland\Delphi4\Projects\ProjectGroup1.bpg]
-FormState=0
-FormOnTop=0
+File_0=SourceModule,'C:\Projects\MBF\Exact8\Prepare\Prepare.dpr',0,1,1,16,1,0,0
+File_1=SourceModule,'C:\Projects\Monitor\NewMon\MainFrm.pas',0,1,91,19,101,0,1
+File_2=SourceModule,'C:\Projects\Monitor\NewMon\GraphFrm.pas',0,1,104,27,114,0,1
+File_3=SourceModule,'C:\Projects\Monitor\NewMon\ReportFrm.pas',0,1,1,1,1,0,0
+File_4=SourceModule,'C:\Projects\Monitor\NewMon\AboutFrm.pas',0,1,40,1,51,0,0
+File_5=SourceModule,'C:\Projects\Monitor\NewMon\Tables.pas',0,1,22,30,35,0,0
+File_6=SourceModule,'C:\Projects\Monitor\NewMon\EditFrm.pas',0,1,329,1,335,0,0
+File_7=SourceModule,'C:\Projects\Monitor\BaseMake\EditFrm.pas',0,1,216,5,221,0,0
+File_8=SourceModule,'C:\Projects\Monitor\BaseMake\QueryFrm.pas',0,1,219,1,219,0,0
 

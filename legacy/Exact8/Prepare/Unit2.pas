@@ -132,6 +132,7 @@ begin
   begin
     D5[cn,0]:=i;
     D5[cn,1]:=j;
+    FFF5[i,j]:=cn;
     inc(cn);
   end;
 end;

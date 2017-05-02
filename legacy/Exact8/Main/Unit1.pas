@@ -102,18 +102,19 @@ begin
   ichange:=false;
 
   inc(steps);
-  inc(j);
 
-  while (YamadaAll[Ri].Ratio[j]=0) and (Ri<=Endi) do
-  begin
+  repeat
     if j<7580 then inc(j) else
     begin
       ichange:=true;
       inc(Ri);
-      Ti:=YamadaAll[Ri].f;
-      j:=0;
+      if Ri <= Endi then
+      begin
+        Ti:=YamadaAll[Ri].f;
+        j:=0;
+      end;
     end;
-  end;
+  until (Ri<=Endi) or (YamadaAll[Ri].Ratio[j]=0);
 
   if ichange then
   begin
